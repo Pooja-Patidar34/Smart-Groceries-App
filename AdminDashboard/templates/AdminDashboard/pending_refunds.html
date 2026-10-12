@@ -1,0 +1,40 @@
+{% extends "AdminDashboard/base.html" %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+        <section class="content-header">
+                <h1>Pending Refund Requests</h1>
+        </section>
+        <section class="content">
+                <table class="table table-bordered table-striped text-center">
+                        <thead>
+                                <tr>
+                                        <th>Order ID</th>
+                                        <th>User</th>
+                                        <th>Reason</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                </tr>
+                        </thead>
+                        <tbody>
+                                {% for d in refunds %}
+                                <tr>
+                                        <td>{{d.order.orderid}}</td>
+                                        <td>{{d.requested_by.email}}</td>
+                                        <td>{{d.reason}}</td>
+                                        <td>Rs.{{d.order.price}}</td>
+                                        <td>
+                                                <a href="{% url 'process_refund' d.id%}"
+                                                        class="btn btn-sm btn-primary">Process Refund</a>
+                                        </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                        <td colspan="5">No pending refunds</td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                </table>
+        </section>
+</div>
+{% endblock content %}

@@ -1,0 +1,29 @@
+{% extends "AdminDashboard/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container-fluid mt-4">
+  <h2 class="mb-4">📊 User Metrics</h2>
+
+  <!-- Stats Row -->
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card shadow-lg border-0 rounded-3 text-center p-3 bg-primary text-white">
+        <h2><b>{{total_active_subscription}}</b></h2>
+        <p><a href="{% url 'active_subscription' %}" class="text-white">Active Subscription Users</a></p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-lg border-0 rounded-3 text-center p-3 bg-success text-white">
+        <h2><b>{{total_expired_subscription}}</b></h2>
+        <p><a href="{% url 'expired_subscription' %}" class="text-white">Expired Subscription Users</a></p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-lg border-0 rounded-3 text-center p-3 bg-warning text-white">
+        <h2><b>{{total_trial_subscription}}</b></h2>
+        <p><a href="{% url 'trial_subscription' %}">Trial Subscriptions</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

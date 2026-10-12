@@ -1,0 +1,79 @@
+{% extends "AdminDashboard/base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-lg border-0 rounded-4">
+
+        <!-- Header -->
+        <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
+          <h5 class="mb-0 fw-semibold">📢 Send Notification</h5>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body bg-light rounded-bottom-4 p-4">
+          <form id="notifyForm">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="title" class="form-label fw-semibold">Title</label>
+              <input type="text" name="title" id="title" class="form-control" placeholder="Enter title" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="message" class="form-label fw-semibold">Message</label>
+              <textarea name="message" id="message" rows="4" class="form-control" placeholder="Enter message" required></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="image_url" class="form-label fw-semibold">Image URL (optional)</label>
+              <input type="url" name="image_url" id="image_url" class="form-control" placeholder="https://example.com/image.png">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+              🚀 Send Notification
+            </button>
+          </form>
+
+          <div id="responseMessage" class="text-center mt-3 fw-bold"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+<!-- Script -->
+document.getElementById("notifyForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const imageUrl = document.getElementById("image_url").value.trim();
+  const responseBox = document.getElementById("responseMessage");
+  responseBox.textContent = "";
+
+  // 🛡️ Validate URL if provided
+  if (imageUrl && !/^https?:\/\/[^\s$.?#].[^\s]*$/i.test(imageUrl)) {
+    responseBox.textContent = "❌ Please enter a valid image URL (must start with http or https)";
+    responseBox.style.color = "red";
+    return;
+  }
+
+  const formData = new FormData(this);
+  responseBox.textContent = "Sending...";
+
+  const res = await fetch("{% url 'notify_all_users' %}", {
+    method: "POST",
+    body: formData,
+    headers: {
+      "X-CSRFToken": "{{ csrf_token }}"
+    }
+  });
+
+  const data = await res.json();
+  responseBox.textContent = data.message;
+  responseBox.style.color = data.status === "success" ? "green" : "red";
+});
+</script>
+
+{% endblock %}

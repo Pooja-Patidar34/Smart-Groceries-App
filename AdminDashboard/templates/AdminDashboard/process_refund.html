@@ -1,0 +1,30 @@
+{% extends "AdminDashboard/base.html" %}
+{% load static %}
+{% block content %}
+    
+<div class="content-wrapper">
+          <section class="content-header">
+                    <h1>Process Refund</h1>
+          </section>
+          <section class="content">
+                    <p><strong>Order :</strong>{{dispute.order.orderid}}</p>
+                    <p><strong>User :</strong>{{dispute.raised_by.username}}</p>
+                    <p><strong>Amount :</strong>Rs. {{dispute.order.price}}</p>
+                    <p><strong>Reason :</strong> {{dispute.reason}}</p>
+                    <form action="" method="post">
+                              {% csrf_token %}
+                              <div class="form-group">
+                              <label for="">Refund Amount (Order Total : Rs {{order_amount}})</label>
+                              <input type="number" name="refund_charges" class="form-control" value="0" step="0.01" min="0">
+                              <small class="text-muted">Enter amount to deduct as  refund charges</small>
+                              </div>
+                              <div class="form-group" mt-2>
+                                        <label for="">Resolution Comment</label>
+                                        <textarea name="resolution_comment" class="form-control" id=""></textarea>
+                              </div>
+                              <button type="submit" class="btn btn-success mt-2">Refund Approve</button>
+                              <a href="{% url 'pending_refunds'%}" class="btn btn-secondary mt-2">Cancel</a>
+                    </form>
+          </section>
+</div>
+{% endblock content %}

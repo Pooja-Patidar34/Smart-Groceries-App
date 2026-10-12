@@ -1,0 +1,92 @@
+{% extends "AdminDashboard/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="content-wrapper py-4 px-3 bg-light">
+    <!-- Date Range Filter -->
+    <section class="card shadow-sm border-0 mb-4 rounded-3 p-3 bg-white">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="start_date" class="form-label fw-semibold">Start Date</label>
+                <input type="text" id="start_date" name="start_date" class="form-control" placeholder="yyyy-mm-dd"
+                    value="{{ start_date|default:'' }}">
+            </div>
+            <div class="col-md-4">
+                <label for="end_date" class="form-label fw-semibold">End Date</label>
+                <input type="text" id="end_date" name="end_date" class="form-control" placeholder="yyyy-mm-dd"
+                    value="{{ end_date|default:'' }}">
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-50">
+                    <i class="fas fa-filter me-2"></i>Apply
+                </button>
+            </div>
+        </form>
+    </section>
+
+
+    <!-- Header Section -->
+    <section class="mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h2 class="fw-bold text-primary mb-1">Commission Report</h2>
+                <!-- <p class="text-muted mb-0">
+                    Current Commission Rate:
+                    <span class="badge bg-primary text-white px-3 py-2">{{ rate }}%</span>
+                </p> -->
+            </div>
+            <div class="mt-2 mt-md-0">
+                <button class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-download me-2"></i>Export Report
+                </button>
+            </div>
+        </div>
+        <hr class="mt-3">
+    </section>
+
+    <!-- Summary by Seller -->
+    <section class="card border-0 shadow-sm mb-4 rounded-3">
+        <div class="card-body">
+            <h5 class="fw-bold mb-3 text-secondary">
+                <i class="fas fa-users me-2"></i> Commission Summary by Seller
+            </h5>
+
+            <div class="table-responsive">
+                <!-- Summary by Seller -->
+                <table class="table align-middle table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Seller</th>
+                            <th>Total Orders</th>
+                            <th>Total Sales</th>
+                            <th>Commission Earned</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for seller in seller_commissions %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'seller_meals_report' seller.seller_email %}"
+                                    class="text-decoration-none text-primary fw-semibold">
+                                    {{ seller.seller_name }}
+                                </a>
+                            </td>
+
+                            <td>{{ seller.total_orders }}</td>
+                            <td>{{ seller.total_sales|floatformat:2 }}</td>
+                            <td class="fw-semibold text-success">{{ seller.commission_earned|floatformat:2 }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-muted py-3">No completed orders yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock content %}

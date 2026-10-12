@@ -1,0 +1,79 @@
+{% extends "AdminDashboard/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="content-wrapper">
+  <section class="content-header">
+    <h1>All Payouts</h1>
+  </section>
+
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+      {{ message }}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <section class="content">
+    <table class="table table-bordered table-striped text-center align-middle">
+      <thead class="table-primary">
+        <tr>
+          <th>User</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Transfer</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for payout in payouts %}
+        <tr>
+          <td>{{ payout.order.seller.email }}</td>
+          <td>₹ {{ payout.amount }}</td>
+
+          <td>
+            {% if payout.status == "transferred" %}
+            <span class="badge bg-success text-uppercase">Transferred</span>
+            {% elif payout.status == "pending" %}
+            <span class="badge bg-warning text-uppercase">Pending</span>
+            {% else %}
+            <span class="badge bg-danger text-uppercase">{{ payout.status }}</span>
+            {% endif %}
+          </td>
+
+          <td>
+            {% if payout.status == "completed" %}
+            <!-- COMPLETED → Disable Button -->
+            <button class="btn btn-success w-25" disabled>Transffered</button>
+
+            {% elif payout.status == "pending" %}
+            <!-- PENDING → Enable Button -->
+            <form method="post" action="{% url 'payout_view' payout.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary w-25">Transfer</button>
+            </form>
+
+            {% elif payout.status == "completed" %}
+            <button class="btn btn-success w-25" disabled>Transferred ✅</button>
+
+            {% else %}
+            <span class="badge bg-danger">Failed</span>
+            {% endif %}
+          </td>
+
+        </tr>
+
+        {% empty %}
+        <tr>
+          <td colspan="4" class="text-muted">No payouts processed yet</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+
+{% endblock content %}

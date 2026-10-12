@@ -1,0 +1,27 @@
+{% extends "AdminDashboard/base.html" %}
+{% block content %}
+<div class="container-fluid mt-4">
+  <h2 class="mb-4">📊 User Metrics</h2>
+
+  <!-- Stats Row -->
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card shadow-lg border-0 rounded-3 text-center p-3 bg-primary text-white">
+        <h2><b>{{total_registered}}</b></h2>
+        <p><a href="{% url 'all_registered_users' %}" class="text-white">View Registered Users</a></p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-lg border-0 rounded-3 text-center p-3 bg-success text-white">
+        <h2><b class="">{{active_users}}</b></h2>
+        <p><a href="{% url 'all_logged_in_users' %}" class="text-white">View Active Users</a></p>
+      </div>
+    </div> <br>
+    <div class="col-md-4 mt-2">
+      <div class="card shadow-lg border-0 rounded-3 text-center p-3 bg-warning text-white">
+        <h2><b>{{new_signups}}</b></h2>
+        <p><a href="{% url 'new_signups' %}">View New Signups</a></p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "AdminDashboard/base.html" %}
+{% load static %}
+{% block content %}
+  
+<div class="content-wrapper">
+          <section class="content-header">
+                    <h1>All Refunds</h1>
+
+          </section>
+          <section class="content">
+                    <table class="table table-bordered table-striped text-center">
+                              <thead>
+                                        <tr>
+                                                  <th>Refund ID</th>
+                                                  <th>Order ID</th>
+                                                  <th>User</th>
+                                                  <th>Amount</th>
+                                                  <th>Status</th>
+                                                  <th>Requested On</th>
+                                                  <th>Processed On</th>
+                                        </tr>
+                              </thead>
+                              <tbody>
+                                        {% for r in refunds %}
+                                        <tr>
+                                                  <td>{{r.refund_id|default:"-"}}</td>
+                                                  <td>{{r.order.orderid}}</td>
+                                                  <td>{{r.requested_by.username}}</td>
+                                                  <td>Rs. {{r.amount}}</td>
+                                                  <td>
+                                                            {% if r.status == "succeeded" %}
+                                                              <span class="bg-success">{{r.status}}</span>
+                                                            {% elif r.status == "pending" %}
+                                                              <span class="bg-warning">{{r.status}}</span>
+                                                            {% else %}
+                                                               <span class="bg-danger">{{r.status}}</span>
+                                                            {% endif %}
+                                                  </td>
+                                                  <td>{{ r.created_at|date:"Y-m-d" }}</td>
+                                                  <td>{{r.processed_at|date:"Y-m-d" }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                                  <td colspan="7">no Refund processed yet</td>
+                                        </tr>
+                                        {% endfor %}
+                              </tbody>
+
+                    </table>
+          </section>
+</div>
+
+{% endblock content %}

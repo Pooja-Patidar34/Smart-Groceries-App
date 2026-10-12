@@ -1,0 +1,88 @@
+{% extends "AdminDashboard/base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-lg border-0 rounded-4">
+
+        <!-- Header -->
+        <div class="card-header bg-primary text-white text-center rounded-top-4 py-3">
+          <h5 class="mb-0 fw-semibold">➕ Create Subscription</h5>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body bg-light p-4 rounded-bottom-4">
+          <form method="post" novalidate autocomplete="off">
+            {% csrf_token %}
+
+            <!-- Name -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Name</label>
+              <input type="text" name="name" class="form-control" placeholder="Enter Subscription Name" required>
+            </div>
+
+            <!-- Plan Type -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Plan Type</label>
+              <select name="plan_type" class="form-control" required>
+                <option value="">-- Select Plan Type --</option>
+                <option value="Trial">Trial</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Annually">Annually</option>
+              </select>
+            </div>
+
+            <!-- Duration -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Duration</label>
+              <input type="number" name="duration" class="form-control" placeholder="e.g., 7 or 30" required>
+              <small class="text-muted">Duration length (e.g., 7 days, 30 days)</small>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Price</label>
+              <input type="number" step="0.01" name="price" class="form-control" placeholder="Enter Price" required>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Description</label>
+              <textarea name="description" rows="3" class="form-control" placeholder="Write short description..."></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-between mt-4">
+              <a href="{% url 'subscription_list' %}" class="btn btn-outline-secondary px-4">
+                ⬅ Cancel
+              </a>
+              <button type="submit" class="btn btn-success px-4">
+                💾 Save
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optional styling -->
+<style>
+  .form-control {
+    border-radius: 10px;
+    height: 42px;
+  }
+  textarea.form-control {
+    height: auto;
+  }
+  .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.15);
+  }
+</style>
+
+{% endblock %}

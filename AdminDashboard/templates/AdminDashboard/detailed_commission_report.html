@@ -1,0 +1,136 @@
+{% extends "AdminDashboard/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="content-wrapper py-4 px-3 bg-light">
+  <!-- Date Range Filter -->
+  <section class="card shadow-sm border-0 mb-4 rounded-3 p-4 bg-white">
+
+    <form method="get" class="row g-3 justify-content-center">
+      <!-- Start Date -->
+      <div class="col-md-5">
+        <label for="start_date" class="form-label fw-semibold">Start Date</label>
+        <input
+          type="text"
+          id="start_date"
+          name="start_date"
+          class="form-control"
+          placeholder="yyyy-mm-dd"
+          value="{{ start_date|default:'' }}"
+          required
+        />
+      </div>
+
+      <!-- End Date -->
+      <div class="col-md-5">
+        <label for="end_date" class="form-label fw-semibold">End Date</label>
+        <input
+          type="text"
+          id="end_date"
+          name="end_date"
+          class="form-control"
+          placeholder="yyyy-mm-dd"
+          value="{{ end_date|default:'' }}"
+          required
+        />
+      </div>
+
+      <!-- Filter Button Below -->
+      <div class="col-12 text-center mt-3">
+        <button type="submit" class="btn btn-primary px-5 py-2">
+          <i class="fas fa-filter me-2"></i>Apply Filter
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Header Section -->
+  <section class="mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+      <div>
+        <h2 class="fw-bold text-primary mb-1">Commission Report</h2>
+      </div>
+      <div class="mt-2 mt-md-0">
+        <button class="btn btn-outline-primary btn-sm">
+          <i class="fas fa-download me-2"></i>Export Report
+        </button>
+      </div>
+    </div>
+    <hr class="mt-3" />
+  </section>
+
+  <!-- Detailed Breakdown by Order -->
+  <section class="card border-0 shadow-sm mb-4 rounded-3">
+    <div class="card-body">
+      <h5 class="fw-bold mb-3 text-secondary">
+        <i class="fas fa-list-alt me-2"></i> Detailed Commission per Order
+      </h5>
+
+      <div class="table-responsive">
+        <table class="table align-middle table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Order ID</th>
+              <th>Seller</th>
+              <th>Buyer</th>
+              <th>Meal</th>
+              <th>Price</th>
+              <th>Commission</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in order_commissions %}
+            <tr>
+              <td>{{ order.orderid }}</td>
+              <td>{{ order.seller_name }} ({{ order.seller_email }})</td>
+              <td>{{ order.buyer_email }}</td>
+              <td>{{ order.meal_name }}</td>
+              <td>{{ order.price|floatformat:2 }}</td>
+              <td class="fw-semibold text-success">
+                {{ order.commission_earned|floatformat:2 }}
+              </td>
+              <td>{{ order.created_at|date:"d M Y, H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="7" class="text-muted">No completed orders found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CSS Styling for Beautiful Look -->
+<style>
+  .form-control {
+    border-radius: 8px;
+    height: 44px;
+    border: 1px solid #ced4da;
+    transition: 0.2s;
+  }
+
+  .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+  }
+
+  button.btn-primary {
+    border-radius: 8px;
+    font-weight: 500;
+  }
+
+  .card {
+    transition: all 0.2s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+{% endblock content %}

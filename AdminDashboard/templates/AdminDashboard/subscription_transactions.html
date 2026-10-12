@@ -1,0 +1,85 @@
+{% extends "AdminDashboard/base.html" %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+  <section class="content-header">
+    <form action="{% url 'subscription_transaction' %}" class="d-flex mb-2 mt-2 mx-2">
+      <input type="search" class="form-control me-2 w-25" placeholder="Search orderid" name="q"value="{{ query|default:'' }}">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+      <a href="{% url 'notify_expired_subscription' %}" class="btn btn-warning" style="margin-left: 53%;">Send Notifications</a>
+    </form>
+  </section>
+  <section class="content">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h3 class="card-title">Subscription Transaction List</h3>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-bordered table-striped text-center align-middle text-center">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Email</th>
+              <th>Amount</th>
+              <th>Currency</th>
+              <th>Status</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Status</th>
+              <th>Subscription Type</th>
+              <th>Created_at</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in transactions %}
+            <tr>
+              <td>{{ t.orderid }}</td>
+              <td>{{ t.user.email }}</td>
+              <td>{{ t.amount }}</td>
+              <td>{{ t.currency}}</td>
+              <td>{{ t.subscription_status}}</td>
+              <td>{{ t.start_date}}</td>
+              <td>{{ t.end_date}}</td>
+              <td>{{ t.status }}</td>
+              <td>{{ t.subscription_type}}</td>
+              <td>{{ t.created_at|date:"Y-m-d H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="8" class="text-muted">No subscriptions found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="pagination-container mt-4 mx-5">
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+              {% if transactions.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ transactions.previous_page_number }}">Previous</a>
+              </li>
+              {% else %}
+              <li class="page-item disabled"><span class="page-link">Previous</span></li>
+              {% endif %}
+              {% for page_num in transactions.paginator.page_range %}
+              {% if transactions.number == page_num %}
+              <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+              {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a></li>
+              {% endif %}
+              {% endfor %}
+              {% if transactions.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ transactions.next_page_number }}">Next</a>
+              </li>
+              {% else %}
+              <li class="page-item disabled"><span class="page-link">Next</span></li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}      

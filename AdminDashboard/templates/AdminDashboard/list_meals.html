@@ -1,0 +1,124 @@
+{% extends "AdminDashboard/base.html" %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+  <section class="content-hearder">
+
+    <form class="d-flex mb-2 mt-2" method="GET" action="">
+      <input class="form-control me-2 w-25 mx-2" type="search" placeholder="Search by user or item name" name="q"
+        value="{{ query|default:'' }}">
+      <button class="btn btn-outline-primary" type="submit">Search</button>
+    </form>
+  </section>
+  <section class="content">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h3 class="card-title">Listed Meal</h3>
+      </div>
+      <div class="card-body table-responsive">
+        <table id="ordersTable" class="table table-bordered table-striped align-middle text-center">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Item Name</th>
+              <th>Ingredients</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Available From</th>
+              <th>Available_To</th>
+              <th>Expiry_date</th>
+              <th>Is_donation</th>
+              <th>Pickup Address</th>
+              <th>image</th>
+              <th>Delivery Method</th>
+              <th>Diet Type</th>
+              <th>Description</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+              <th>Created_at</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for meal in meals %}
+            <tr>
+              <td>{{meal.user}}</td>
+              <td>{{meal.item_name}}</td>
+              <td>{{meal.ingredients}}</td>
+              <td>{{meal.quantity}}</td>
+              <td>{{meal.price}}</td>
+              <td>{{meal.available_from}}</td>
+              <td>{{meal.available_to}}</td>
+              <td>{{meal.expiry_date}}</td>
+              <td>{{meal.is_donation}}</td>
+              <td>{{meal.pickup_address}}</td>
+              <td>
+                {% if meal.image %}
+                <img src="{{ meal.image.url }}" alt="{{ meal.item_name }}" width="80" height="80"
+                  style="border-radius:8px;">
+                {% else %}
+                <span class="text-muted">No Image</span>
+                {% endif %}
+              </td>
+              <td>{{meal.delivery_method}}</td>
+              <td>{{meal.diet_type}}</td>
+              <td>{{meal.description}}</td>
+              <td>{{meal.latitude}}</td>
+              <td>{{meal.longitude}}</td>
+              <td>{{meal.created_at}}</td>
+              {% empty %}
+            <tr>
+              <td colspan="7" class="text-center">No Orders found</td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+        <!-- Pagination -->
+        {% if meals.has_other_pages %}
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center mt-4">
+
+            <!-- Previous Button -->
+            {% if meals.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ meals.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                Previous
+              </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+
+            <!-- Page Numbers -->
+            {% for num in meals.paginator.page_range %}
+            {% if meals.number == num %}
+            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% else %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            <!-- Next Button -->
+            {% if meals.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ meals.next_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                Next
+              </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+
+          </ul>
+        </nav>
+        {% endif %}
+
+
+      </div>
+    </div>
+  </section>
+</div>
+
+{% endblock content %}

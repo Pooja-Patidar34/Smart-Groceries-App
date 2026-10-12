@@ -1,0 +1,92 @@
+{% extends "AdminDashboard/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="content-wrapper">
+
+    <section class="content-header mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="font-weight-bold mb-0">🎯 Set Commission</h2>
+
+        </div>
+        <hr>
+    </section>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <section class="content">
+        <form id="commissionForm" method="POST" style="display:none;">
+            {% csrf_token %}
+            <input type="hidden" name="commission_id" id="commission_id">
+            <div class="form-group">
+                <label>Commission Rate (%)</label>
+                <input type="number" step="0.01" class="form-control" name="rate" id="rate" required>
+            </div>
+            <button type="submit" class="btn btn-success">Save</button>
+            <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+        </form>
+
+        <table class="table table-bordered table-striped text-center mt-4">
+            <thead>
+                <tr>
+                    <th>Label</th>
+                    <th>Rate (%)</th>
+                    <th>Last Updated</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for commission in commissions %}
+                <tr>
+                    <td>{{ commission.label }}</td>
+                    <td>{{ commission.value }}</td>
+                    <td>{{ commission.updated_at|date:"d M Y H:i" }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning editBtn" data-id="{{ commission.id }}"
+                            data-rate="{{ commission.value }}">
+                            Edit
+                        </button>
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No commission rates set yet</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
+
+<script>
+
+    const form = document.getElementById("commissionForm");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const rateInput = document.getElementById("rate");
+    const commissionIdInput = document.getElementById("commission_id");
+
+    cancelBtn.addEventListener("click", () => {
+        form.style.display = "none";
+    });
+
+    // Show form and fill data when Edit is clicked
+    document.querySelectorAll(".editBtn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            form.style.display = "block"; // show the form
+            rateInput.value = e.target.dataset.rate; // fill rate
+            commissionIdInput.value = e.target.dataset.id; // fill id
+        });
+    });
+</script>
+
+
+{% endblock content %}

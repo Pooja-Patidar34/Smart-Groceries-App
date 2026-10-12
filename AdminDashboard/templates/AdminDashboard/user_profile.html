@@ -1,0 +1,81 @@
+{% extends "AdminDashboard/base.html" %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid mb-3">
+            <h1 class="fw-bold">{{ user.username }}'s Profile</h1>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">User Details & Preferences</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <tbody>
+                        <tr>
+                            <th>Username</th>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Height</th>
+                            <td>{{ preferences.height|default:"Not Set" }} {{ preferences.height_unit|default:"" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Current Weight</th>
+                            <td>{{ preferences.current_weight|default:"Not Set" }} {{ preferences.weight_unit|default:""}}</td>
+                        </tr>
+                        <tr>
+                            <th>Target Weight</th>
+                            <td>{{ preferences.target_weight|default:"Not Set" }} {{ preferences.weight_unit|default:""}}</td>
+                        </tr>
+                        <tr>
+                            <th>Diet Goal</th>
+                            <td>{{ preferences.diet_goal|default:"Not Set" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Diet Type</th>
+                            <td>{{ preferences.diet_type|default:"Not Set" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Cooking Style</th>
+                            <td>{{ preferences.cooking_style|default:"Not Set" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Flavour Preferences</th>
+                            <td>{{ preferences.flavour_preferences|default:"Not Set" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Cuisine Preferences</th>
+                            <td>{{ preferences.cuisine_preferences|default:"Not Set" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Allergies</th>
+                            <td>{{ preferences.allergies|default:"None" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Weekly Budget</th>
+                            <td>{{ preferences.weekly_budget|default:"0" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Monthly Budget</th>
+                            <td>{{ preferences.monthly_budget|default:"0" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Joined On</th>
+                            <td>{{ user.created_at|date:"Y-m-d H:i" }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
